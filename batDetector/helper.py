@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from cellData import cellData
+from constants import LITHIATION,VOLTAGE
 
 def string_is_float(string: str):
     try:
@@ -18,15 +20,15 @@ def normalize(arr):
     """
     return (arr - np.min(arr))/(np.max(arr) - np.min(arr))
 
-def interpolate_halfcellData(halfcellData:dict[str,pd.DataFrame], steps:int):
-    for key in halfcellData.keys():
+def interpolate_halfcellData(halfcellDataList:list[cellData], steps:int):
+    for index,cell in enumerate(halfcellDataList):
 
-        df = halfcellData[key].copy(deep=True)
-        dfNew = np.linspace(df['Lithiation'].min(), df['Lithiation'].max(),steps)
+        df = cell.getData().copy(deep=True)
+        df_new = np.linspace(df[LITHIATION].min(), df[LITHIATION].max(),steps)
 
         # Interpolate to extend granularity
-        dfInterp=pd.DataFrame({'Lithiation':dfNew})
-        dfInterp['Voltage']=np.interp(dfNew,df['Lithiation'],df['Voltage'])
+        df_interp=pd.DataFrame({LITHIATION:df_new})
+        df_interp[VOLTAGE]=np.interp(df_new,df[LITHIATION],df[VOLTAGE])
 
         # Replace old Dataframe with more points
-        halfcellData[key] = dfInterp
+        halfcellDataList[index].setData(df_interp)

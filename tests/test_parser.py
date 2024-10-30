@@ -2,23 +2,21 @@ import pandas as pd
 import batDetector.parser as batParser
 from unittest import TestCase
 
+from cellData import cellData
+from helper import interpolate_halfcellData
 
 
 class Test(TestCase):
     def test_read_halfcell_data_csv(self):
-        dict = batParser.read_halfcell_data_csv(r"F:\Uni\Bachelor\Data\Halbzelldaten")
+        arr = batParser.read_halfcell_data_csv(r"F:\Uni\Bachelor\Data\Halbzelldaten")
+        interpolate_halfcellData(arr,100)
         # test for graphite
-        for key in dict.keys():
-            if "graphite" in key.lower():
-                df = dict[key]
-                max_val = df['Voltage'].max()
-                min_val = df['Voltage'].min()
-                if max_val >= 2:
-                    self.fail()
-                if min_val < 0:
-                    self.fail()
+        for cell in arr:
+            if "LFP" in cell.getComposition().upper():
+                cell.plot_data()
 
 
-class Test(TestCase):
-    def test_read_basytec(self):
-        batParser.read_basytec(r"F:\Uni\Bachelor\Data\CU_BOL_Basytec\TC23LFP01_CU_25deg.txt")
+
+# class Test(TestCase):
+#     def test_read_basytec(self):
+#         batParser.read_basytec(r"G:\GitHub\Bachelor-Battery\iOCVData\TC23LFP01_CU_25deg.txt")

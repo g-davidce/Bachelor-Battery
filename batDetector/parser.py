@@ -1,9 +1,10 @@
 import pandas as pd
 
-from batDetector.constants import TIME,COMMAND,VOLTAGE,CURRENT
+from batDetector.constants import TIME,COMMAND,VOLTAGE,CURRENT,LITHIATION
 from os import listdir
 from os.path import isfile, join
 
+from cellData import cellData
 from helper import string_is_float
 
 names_dictionary={
@@ -11,7 +12,7 @@ names_dictionary={
     "Command":COMMAND,
     "U[V]":VOLTAGE,
     "I[A]":CURRENT,
-
+    "Lithiation":LITHIATION,
 }
 
 def lithiation_ok(val1: float):
@@ -47,12 +48,12 @@ def read_halfcell_data_csv(path: str):
 
     @param path: Enter path to halfcell Data Path
     @type path: String
-    @return: Dictionary with Halfcell Data, Name of Dataset is Key
-    @rtype: dictionary
+    @return: list with halfcell data objects
+    @rtype: list
     """
     try:
         halfcellFiles = [files for files in listdir(path) if isfile(join(path,files))]
-        dfList = {}
+        dfList = []
         for halfcellFile in halfcellFiles:
             if halfcellFile.endswith(".csv"):
                 with open(join(path,halfcellFile),'r') as file:
@@ -76,12 +77,10 @@ def read_halfcell_data_csv(path: str):
                                 valArr.append((lithiationVal,voltageVal))
                                 dataOk=True
                     if dataOk:
-                        df=pd.DataFrame(valArr,columns=['Lithiation','Voltage'])
-                        dfList[halfcellFile.split(".")[0]]=df
+                        df=pd.DataFrame(valArr,columns=[LITHIATION,VOLTAGE])
+                        cell = cellData(halfcellFile.split(".")[0], df,True)
+                        dfList.append(cell)
         return dfList
-
-
-
 
     except IOError as e :
         print("IOError: %s" % e)

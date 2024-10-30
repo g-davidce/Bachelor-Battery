@@ -7,4 +7,4 @@ TEMPERATURE = "Temperature (degC)"
 SOC = "SOC in (%)"
 OCV = "OCV in (V)"
 COMMAND = "Command"
-
+LITHIATION = "Lithiation"
