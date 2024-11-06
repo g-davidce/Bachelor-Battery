@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from cellData import cellData
+import cellData
 from constants import LITHIATION,VOLTAGE
 
 def string_is_float(string: str):
@@ -20,10 +20,10 @@ def normalize(arr):
     """
     return (arr - np.min(arr))/(np.max(arr) - np.min(arr))
 
-def interpolate_halfcellData(halfcellDataList:list[cellData], steps:int):
-    for index,cell in enumerate(halfcellDataList):
+def interpolate_halfcell_data(halfcell_data_list:list[cellData], steps:int):
+    for index,cell in enumerate(halfcell_data_list):
 
-        df = cell.getData().copy(deep=True)
+        df = cell.get_data().copy(deep=True)
         df_new = np.linspace(df[LITHIATION].min(), df[LITHIATION].max(),steps)
 
         # Interpolate to extend granularity
@@ -31,4 +31,4 @@ def interpolate_halfcellData(halfcellDataList:list[cellData], steps:int):
         df_interp[VOLTAGE]=np.interp(df_new,df[LITHIATION],df[VOLTAGE])
 
         # Replace old Dataframe with more points
-        halfcellDataList[index].setData(df_interp)
+        halfcell_data_list[index].set_data(df_interp)

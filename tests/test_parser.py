@@ -3,16 +3,16 @@ import batDetector.parser as batParser
 from unittest import TestCase
 
 from cellData import cellData
-from helper import interpolate_halfcellData
+from helper import interpolate_halfcell_data
 
 
 class Test(TestCase):
     def test_read_halfcell_data_csv(self):
         arr = batParser.read_halfcell_data_csv(r"F:\Uni\Bachelor\Data\Halbzelldaten")
-        interpolate_halfcellData(arr,100)
+        interpolate_halfcell_data(arr, 100)
         # test for graphite
         for cell in arr:
-            if "LFP" in cell.getComposition().upper():
+            if "LFP" in cell.get_composition().upper():
                 cell.plot_data()
 
 
