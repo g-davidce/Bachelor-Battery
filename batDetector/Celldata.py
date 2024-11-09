@@ -66,3 +66,5 @@ class Celldata:
             if val_0 < val_1:
                 return self.curve.iloc[::-1].reset_index(drop=True)
         return self.curve
+    def get_is_halfcell(self):
+        return self.is_half_cell

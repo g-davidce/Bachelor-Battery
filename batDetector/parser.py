@@ -41,7 +41,7 @@ def ocv_ok(val1: float):
     else:
         return False
 
-def read_halfcell_data_csv(path: str, is_pos: bool):
+def read_halfcell_data_csv(path: str, is_pos: bool, precision:int=3):
     """
     Read all data files from given directory and appends it to dictionary.
     Current Limitation are CSV with "," as delimiter
@@ -80,10 +80,24 @@ def read_halfcell_data_csv(path: str, is_pos: bool):
                                 data_ok=True
                     if data_ok:
                         df=pd.DataFrame(val_arr,columns=[LITHIATION,VOLTAGE])
+                        df=df.round(precision)
                         cell = Celldata(halfcellFile.split(".")[0], df, True, is_pos=is_pos)
                         df_list.append(cell)
         return df_list
 
+    except IOError as e :
+        print("IOError: %s" % e)
+        return []
+
+def read_cell_data_csv(data_dir: str, is_halfcell:bool, is_pos:bool=False, precision:int=5):
+    df_list = []
+    try:
+        for files in listdir(data_dir):
+            df = pd.read_csv(join(data_dir, files))
+            df = df.round(precision)
+            cell = Celldata(files.split(".")[0], df, is_halfcell, is_pos=is_pos)
+            df_list.append(cell)
+        return df_list
     except IOError as e :
         print("IOError: %s" % e)
         return []

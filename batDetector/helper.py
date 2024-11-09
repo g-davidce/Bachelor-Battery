@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 import Celldata
-from constants import LITHIATION,VOLTAGE
+from constants import LITHIATION,VOLTAGE,SOC
 
 def string_is_float(string: str):
     try:
@@ -20,18 +20,26 @@ def normalize(arr):
     """
     return (arr - np.min(arr))/(np.max(arr) - np.min(arr))
 
-def interpolate_halfcell_data(halfcell_data_list:list[Celldata], steps:int):
-    for index,cell in enumerate(halfcell_data_list):
+def interpolate(df:pd.DataFrame, colm:str, voltage_col:str, steps:int, precision:int=3):
+    colm_ext=np.linspace(df[colm].min(),df[colm].max(),steps-len(df))
 
-        df = cell.get_data().copy(deep=True)
-        df_new = np.linspace(df[LITHIATION].min(), df[LITHIATION].max(),steps)
+    df_colm=pd.DataFrame({colm:colm_ext})
+    df_upsampled = pd.concat([df,df_colm])
+    df_upsampled=df_upsampled.sort_values(by=[colm],ignore_index=True)
+    df_upsampled=df_upsampled.interpolate(method='polynomial',order=5)
 
-        # Interpolate to extend granularity
-        df_interp=pd.DataFrame({LITHIATION:df_new})
-        df_interp[VOLTAGE]=np.interp(df_new,df[LITHIATION],df[VOLTAGE])
+    return df_upsampled
 
-        # Replace old Dataframe with more points
-        halfcell_data_list[index].set_data(df_interp)
+def interpolate_halfcell(df:pd.DataFrame, steps:int, precision:int=5):
+    return interpolate(df, colm=LITHIATION, voltage_col=VOLTAGE, steps=steps)
 
-def read_halfcell_data(dirname: str):
-    return NotImplemented
+def interpolate_fullcell(df:pd.DataFrame, steps:int, precision:int=5):
+    return interpolate(df, colm=SOC, voltage_col=VOLTAGE, steps=steps)
+
+def interpolate_cell_data(cell_data_list:list[Celldata], steps:int, precision:int=5):
+    for index,cell in enumerate(cell_data_list):
+        if cell.get_is_halfcell():
+            df = interpolate_halfcell(cell.get_data(), steps)
+        else:
+            df =interpolate_fullcell(cell.get_data(), steps)
+        cell_data_list[index].set_data(df)
