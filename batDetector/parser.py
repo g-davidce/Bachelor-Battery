@@ -4,7 +4,7 @@ from batDetector.constants import TIME,COMMAND,VOLTAGE,CURRENT,LITHIATION
 from os import listdir
 from os.path import isfile, join
 
-from cellData import cellData
+from Celldata import Celldata
 from helper import string_is_float
 
 names_dictionary={
@@ -17,13 +17,13 @@ names_dictionary={
 
 def lithiation_ok(val1: float):
     """
-    Check if Lithitiation is below 1 and higher than 0
-    @param val1: Lithitiation Value
+    Check if Lithiation is below 1 and higher than 0
+    @param val1: Lithiation Value
     @type val1: float
-    @return: Returns True if Lithitiation is in given Range
+    @return: Returns True if Lithiation is in given Range
     @rtype: Boolean
     """
-    if val1 >= 0 and val1 < 1:
+    if 0 <= val1 < 1:
         return True
     else:
         return False
@@ -36,51 +36,53 @@ def ocv_ok(val1: float):
     @return: Returns True if OCV is in given Range
     @rtype: Boolean
     """
-    if val1 >= 0 and val1 < 6:
+    if 0 <= val1 < 6:
         return True
     else:
         return False
 
-def read_halfcell_data_csv(path: str):
+def read_halfcell_data_csv(path: str, is_pos: bool):
     """
     Read all data files from given directory and appends it to dictionary.
     Current Limitation are CSV with "," as delimiter
 
+    @param is_pos: Giving cell is of type anode or cathode material
+    @type is_pos: Boolean
     @param path: Enter path to halfcell Data Path
     @type path: String
     @return: list with halfcell data objects
     @rtype: list
     """
     try:
-        halfcellFiles = [files for files in listdir(path) if isfile(join(path,files))]
-        dfList = []
-        for halfcellFile in halfcellFiles:
+        halfcell_files = [files for files in listdir(path) if isfile(join(path,files))]
+        df_list = []
+        for halfcellFile in halfcell_files:
             if halfcellFile.endswith(".csv"):
                 with open(join(path,halfcellFile),'r') as file:
 
-                    dataOk=False
-                    valArr=[]
+                    data_ok=False
+                    val_arr=[]
 
                     for line in file:
-                        lineSplit = line.split(",")
+                        line_split = line.split(",")
 
                         #check if first and second value are castable to float
-                        if not string_is_float(lineSplit[0]) and not string_is_float(lineSplit[1]):
+                        if not string_is_float(line_split[0]) and not string_is_float(line_split[1]):
                             continue
                         else:
-                            lithiationVal = float(lineSplit[0])
-                            voltageVal = float(lineSplit[1])
-                            if not lithiation_ok(lithiationVal) or not ocv_ok(voltageVal):
-                                dataOk=False
+                            lithiation_val = float(line_split[0])
+                            voltage_val = float(line_split[1])
+                            if not lithiation_ok(lithiation_val) or not ocv_ok(voltage_val):
+                                data_ok=False
                                 break
                             else:
-                                valArr.append((lithiationVal,voltageVal))
-                                dataOk=True
-                    if dataOk:
-                        df=pd.DataFrame(valArr,columns=[LITHIATION,VOLTAGE])
-                        cell = cellData(halfcellFile.split(".")[0], df,True)
-                        dfList.append(cell)
-        return dfList
+                                val_arr.append((lithiation_val,voltage_val))
+                                data_ok=True
+                    if data_ok:
+                        df=pd.DataFrame(val_arr,columns=[LITHIATION,VOLTAGE])
+                        cell = Celldata(halfcellFile.split(".")[0], df, True, is_pos=is_pos)
+                        df_list.append(cell)
+        return df_list
 
     except IOError as e :
         print("IOError: %s" % e)

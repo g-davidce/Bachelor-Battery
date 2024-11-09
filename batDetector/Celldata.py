@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from batDetector.constants import VOLTAGE,SOC,LITHIATION
 
-class cellData:
+class Celldata:
     """
     This class represents cell data
     """

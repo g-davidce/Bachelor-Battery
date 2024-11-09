@@ -2,7 +2,7 @@ import pandas as pd
 import batDetector.parser as batParser
 from unittest import TestCase
 
-from cellData import cellData
+from Celldata import Celldata
 from helper import interpolate_halfcell_data
 
 
