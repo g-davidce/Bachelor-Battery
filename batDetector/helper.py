@@ -21,11 +21,12 @@ def normalize(arr):
     return (arr - np.min(arr))/(np.max(arr) - np.min(arr))
 
 def interpolate(df:pd.DataFrame, colm:str, voltage_col:str, steps:int, precision:int=3):
-    colm_ext=np.linspace(df[colm].min(),df[colm].max(),steps-len(df))
+    colm_ext=np.linspace(df[colm].min(),df[colm].max(),steps-len(df),endpoint=False)
 
     df_colm=pd.DataFrame({colm:colm_ext})
     df_upsampled = pd.concat([df,df_colm])
     df_upsampled=df_upsampled.sort_values(by=[colm],ignore_index=True)
+    df_upsampled = df_upsampled.drop(1)
     df_upsampled=df_upsampled.interpolate(method='polynomial',order=5)
 
     return df_upsampled

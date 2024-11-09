@@ -89,11 +89,11 @@ def read_halfcell_data_csv(path: str, is_pos: bool, precision:int=3):
         print("IOError: %s" % e)
         return []
 
-def read_cell_data_csv(data_dir: str, is_halfcell:bool, is_pos:bool=False, precision:int=5):
+def read_cell_data_csv(data_dir: str, is_halfcell:bool, is_pos:bool=False, precision:int=5, delimiter:str=","):
     df_list = []
     try:
         for files in listdir(data_dir):
-            df = pd.read_csv(join(data_dir, files))
+            df = pd.read_csv(join(data_dir, files,),sep=delimiter)
             df = df.round(precision)
             cell = Celldata(files.split(".")[0], df, is_halfcell, is_pos=is_pos)
             df_list.append(cell)
