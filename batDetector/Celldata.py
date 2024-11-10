@@ -24,8 +24,8 @@ class Celldata:
         else:
             self.rename_columns([LITHIATION,VOLTAGE])
 
-        if self.is_half_cell:
-            self.check_orientation()
+        #if self.is_half_cell:
+            #self.check_orientation()
 
     def plot_data(self):
         if not self.is_half_cell:
@@ -68,3 +68,5 @@ class Celldata:
         return self.curve
     def get_is_halfcell(self):
         return self.is_half_cell
+    def get_is_pos(self):
+        return self.is_pos
