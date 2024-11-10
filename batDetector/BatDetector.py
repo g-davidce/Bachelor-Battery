@@ -45,7 +45,7 @@ def calc_composition(delta:float=0.1, order:int=5, parameter_guess:[float]=[0.1,
         interpolate_cell_data([full_cell], num_data_points)
         interpolate_cell_data([half_cell_pos], num_data_points, bounds=initial_guess[:2])
         interpolate_cell_data([half_cell_neg], num_data_points, bounds=initial_guess[-2:])
-
+#Todo SIMD schneller?
         return NotImplemented
 
     for cell_i_ocv in i_ocv_data:
