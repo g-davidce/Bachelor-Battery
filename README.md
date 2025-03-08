@@ -4,7 +4,7 @@
 This project determines the material composition of a full cell by reconstructing its incremental open-circuit voltage (iOCV). The reconstruction is based on the open-circuit voltage (OCV) data from half-cell anode and cathode measurements.
 
 ## Features
-- Reconstructs the full-cell iOCV using half-cell anode/cathode OCV data.
+- Reconstructs the full-cell iOCV using half-cell anode/cathode OCP data.
 - Analyzes the material composition of the full cell.
 - Generates visual plots of the best matching half-cell pair, full-cell, and reconstructed voltage curves.
 - Saves analysis results as CSV files for further evaluation.
