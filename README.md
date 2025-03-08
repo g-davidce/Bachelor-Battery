@@ -18,7 +18,7 @@ Follow these steps to set up the environment and install dependencies:
    python3 -m venv <env_name>
    ```
 2. Activate the environment:
-   - **Linux/macOS**:
+   - **Linux**:
      ```sh
      source <env_name>/bin/activate
      ```
@@ -28,7 +28,7 @@ Follow these steps to set up the environment and install dependencies:
      ```
 3. Install necessary packages:
    ```sh
-   pip3 install -r requirements.txt
+   pip3 install -r requirements
    ```
 
 ## Usage
