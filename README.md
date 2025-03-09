@@ -57,6 +57,9 @@ To execute the analysis, call the function `get_material(...)` in the `BatDetect
 At the end of the operation, all results are stored in the `results` folder or printed to the console.
 
 ## Output
-- **Plot**: A visual representation of voltage curves.
-- **CSV**: A file containing numerical results for further analysis.
+- **Plot**: A visual representation of voltage curves.![Match_LFP.png](batDetector/Match_LFP.png)
+- **CSV**: A file containing numerical results for further analysis.[03_01_2025_21_59_23COBYLA.csv](results/03_01_2025_21_59_23COBYLA.csv)
 
+## Additional Information
+- User can add their own half cell data into **halfCellAnodes** and **halfCellCathodes**
+- keep the same format and header order of files
