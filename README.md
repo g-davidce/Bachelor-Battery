@@ -45,7 +45,7 @@ To execute the analysis, call the function `get_material(...)` in the `BatDetect
    ```
 4. Call the function with parameters:
    ```python
-   get_material(cell_cap, [df_nmc], ["LFP"], "COBYLA", False)
+   get_material(cell_cap, df_nmc, "LFP", "COBYLA", False)
    ```
    - The last parameter (`False`) is a boolean that determines whether additional information is printed on the output image.
 5. Ensure the following directories exist in the base directory:

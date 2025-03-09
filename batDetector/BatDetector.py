@@ -134,7 +134,7 @@ def worker(cell_i_ocv, cell_anode, cell_cathode, methode):
         return pd.DataFrame()
 
 
-def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], methode: str, plot_title:bool):
+def get_material(tot_full_cap,df_user_ocv: pd.DataFrame, cell_name: str, methode: str, plot_title:bool):
     """
     This function performs a multi-threaded calculation to fit half-cell data
     to full-cell iOCV data, minimizing the root mean squared error (RMSE).
@@ -162,13 +162,13 @@ def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], met
     halfcell_cathodes = read_cell_data_csv(path_cathodes, True, False)
 
     # Check if the number of full-cell iOCV datasets and cell names matches
-    if len(df_user_ocv) != len(cell_name):
-        raise Exception("name count does not match dataframe count, check input arrays\n"
-                        f"dataframe count was:{len(df_user_ocv)}, cell name array count was:{len(cell_name)}")
+    #if len(df_user_ocv) != len(cell_name):
+    #    raise Exception("name count does not match dataframe count, check input arrays\n"
+    #                    f"dataframe count was:{len(df_user_ocv)}, cell name array count was:{len(cell_name)}")
 
     # Create Celldata objects for each full-cell iOCV dataset
-    ocv_cells = [Celldata(name, df, False, False) for df in df_user_ocv for name in cell_name]
-
+    #ocv_cells = [Celldata(name, df, False, False) for df in df_user_ocv for name in cell_name]
+    ocv_cell=Celldata(cell_name,df_user_ocv,False, False)
     # Initialize an empty dataframe to store the results
     result_df = pd.DataFrame(
         {
@@ -181,7 +181,6 @@ def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], met
 
     # Generate a list of tuples, each tuple representing a task for multiprocessing
     tasks = [(ocv_cell, cell_anode, cell_cathode, methode)
-             for ocv_cell in ocv_cells
              for cell_anode in halfcell_anodes
              for cell_cathode in halfcell_cathodes]
 
@@ -297,7 +296,7 @@ def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], met
     x_anode,x_cathode=get_scaling_offset(best_fit[SOL].loc[0],tot_full_cap)
 
     #plot the best-fitting result
-    plot_data(df_user_ocv[0],anode_data,cath_data,x_anode, x_cathode)
+    plot_data(df_user_ocv,anode_data,cath_data,x_anode, x_cathode)
 
 
 def benchmark():
@@ -349,5 +348,5 @@ if __name__ == "__main__":
     # ["COBYLA", "COBYQA", "Nelder-Mead", "Powell", "TNC"]
     cell_cap=2000 #mAh
     calc_max_cpu()
-    df_nmc= pd.read_csv(r"G:\GitHub\Bachelor-Battery\iOCVData\TC23LFP01_CU_25deg.txt", sep=" ")
-    get_material(cell_cap,[df_nmc], ["LFP-HighV"], "COBYLA",False)
+    df_nmc= pd.read_csv(r"/home/david/Git/Bachelor-Battery/iOCVData/TC23LFP01_CU_25deg.txt", sep=" ")
+    get_material(cell_cap,df_nmc, "LFP", "COBYLA",False)
