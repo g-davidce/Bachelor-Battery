@@ -348,5 +348,5 @@ if __name__ == "__main__":
     # ["COBYLA", "COBYQA", "Nelder-Mead", "Powell", "TNC"]
     cell_cap=2000 #mAh
     calc_max_cpu()
-    df_nmc= pd.read_csv(r"/home/david/Git/Bachelor-Battery/iOCVData/TC23LFP01_CU_25deg.txt", sep=" ")
+    df_nmc= pd.read_csv(r"G:\GitHub\Bachelor-Battery\iOCVData\TC23LFP01_CU_25deg.txt", sep=" ")
     get_material(cell_cap,df_nmc, "LFP", "COBYLA",False)
