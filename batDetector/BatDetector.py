@@ -277,9 +277,9 @@ def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], met
                 VOLTAGE: (cathode_sol[VOLTAGE] - anode_sol[VOLTAGE])
             }
         )
-        simulated_df.plot(ax=ax, x=SOC, y=VOLTAGE, label="simulated",linestyle = 'dashed')
-        ax.set_xlabel("SOC in %")
-        ax.set_ylabel("Voltage in v")
+        simulated_df.plot(ax=ax, x=SOC, y=VOLTAGE, label="Simulated",linestyle = 'dashed')
+        ax.set_xlabel("SOC")
+        ax.set_ylabel("Voltage [V]")
         if plot_title:
             plt.title(f"iOCV Reconstruction\nAnode:{best_fit[HANODE].loc[0]} \nCathode:{best_fit[HCATH].loc[0]}")
         plt.grid()
@@ -298,6 +298,8 @@ def get_material(tot_full_cap,df_user_ocv: [pd.DataFrame], cell_name: [str], met
 
     #plot the best-fitting result
     plot_data(df_user_ocv[0],anode_data,cath_data,x_anode, x_cathode)
+    
+    return result_df
 
 
 def benchmark():
@@ -349,5 +351,5 @@ if __name__ == "__main__":
     # ["COBYLA", "COBYQA", "Nelder-Mead", "Powell", "TNC"]
     cell_cap=2000 #mAh
     calc_max_cpu()
-    df_nmc= pd.read_csv(r"G:\GitHub\Bachelor-Battery\iOCVData\TC23LFP01_CU_25deg.txt", sep=" ")
+    df_nmc= pd.read_csv(r"iOCVData\TC23LFP01_CU_25deg.txt", sep=" ")
     get_material(cell_cap,[df_nmc], ["LFP-HighV"], "COBYLA",False)

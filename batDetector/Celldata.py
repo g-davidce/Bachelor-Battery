@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 from constants import *
@@ -27,7 +28,7 @@ class Celldata:
         else:
             self.rename_columns([LITHIATION, VOLTAGE])
             self._curve[LITHIATION] = self.norm_curve(LITHIATION)
-
+            self._curve = self._curve.sort_values(LITHIATION).reset_index()
         if self._is_half_cell:
             self.check_orientation()
 
