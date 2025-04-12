@@ -63,3 +63,7 @@ At the end of the operation, all results are stored in the `results` folder or p
 ## Additional Information
 - User can add their own half cell data into **halfCellAnodes** and **halfCellCathodes**
 - keep the same format and header order of files
+
+## Citation
+### TODO
+Please refer to this Repository in your work
